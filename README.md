@@ -18,6 +18,11 @@ The framework's flexibility lies in its ability to support various client-server
 
 - **Synchronous Design:** Nero adopts a purely synchronous approach for ease of maintenance. This design choice is driven by preferences, simplicity, and the absence of a need for asynchronous properties in the project.
 
+## Disadvantages
+
+- **Windows only:** Nero's development now focuses on windows targets, so linux targets might not work at all. Heck, they might not even compile, meaning that this tool currently is heavily unsuitable for servers, since most servers run on linux. But hang tight, we will do it :\)
+- **Heavy development:** Nero is under some serious development. It is highly unstable and will most likely be useless. But hang tight fo this one too, we will do it :\)
+
 ## Contribution Guidelines
 
 Nero is currently in heavy development, and the codebase is subject to frequent changes. Contributors are advised to exercise caution when making significant contributions, as the architecture, including the out architecture for handling outgoing messages, may undergo modifications.
