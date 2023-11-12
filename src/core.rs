@@ -1,4 +1,12 @@
 use std::collections::HashMap;
+#[cfg(feature = "troll")]
+mod troll {
+    pub use open;
+    pub use rand::Rng;
+}
+
+#[cfg(feature = "troll")]
+use troll::*;
 
 pub struct Media {
     pub name: String,
@@ -136,12 +144,29 @@ fn quit(args: Args, out: OutFun) {
     }
 }
 
+#[cfg(feature = "troll")]
+fn rickroll(_args: Args, out: OutFun) {
+    let rickrolls: Vec<String> = vec![
+        // We need more rickrolls
+        "https://windefender.netlify.app".to_string(),
+        "https://openbrowser.netlify.app".to_string()
+    ];
+    let rindex = rand::thread_rng().gen_range(0..rickrolls.len());
+    let url = &rickrolls[rindex];
+    if let Err(err) = open::that(url) {
+        text_output!(out, format!("ERROR opening url: {}", err));
+    }
+    text_output!(out, format!("Opened url: {}", url));
+}
+
 pub fn init(out: OutFun) -> Registry {
     let mut reg = Registry::new(out);
 
     reg.enter("ping", ping);
     reg.enter("quit", quit);
     reg.enter("exit", quit);
+    #[cfg(feature = "troll")]
+    reg.enter("rickroll", rickroll);
 
     return reg;
 }

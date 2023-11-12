@@ -2,6 +2,9 @@ use crate::core::{ Registry, OutFun, Command, init };
 
 pub use crate::core::Output;
 
+#[cfg(feature = "spy")]
+compile_error!("The 'spy' feature is not implemented yet.");
+
 pub struct Nero {
     pub reg: Registry,
 }
