@@ -1,12 +1,23 @@
+#![allow(dead_code)]
+#![allow(unused_macros)] // Future contributors, remove this after beta
 mod command;
 mod nero;
 
+use command::Output;
 use nero::Nero;
+
 use std::io;
 
 fn main() {
-    fn out(output: String) {
-        println!("{}", output);
+    fn out(output: Output) {
+        match output {
+            Output::Media(media) => {
+                println!("Media saved to: {}", media.name);
+            }
+            Output::Text(text) => {
+                println!("{}", text.data);
+            }
+        }
     }
 
     let nero = Nero::new(out);

@@ -1,8 +1,20 @@
-#![allow(dead_code)]
 use std::collections::HashMap;
 
+pub struct Media {
+    pub name: String,
+    pub data: String, // Base64 encoded data only
+}
+pub struct Text {
+    pub data: String,
+}
+
+pub enum Output {
+    Media(Media),
+    Text(Text),
+}
+
 pub type Args = Vec<String>;
-pub type OutFun = fn(String);
+pub type OutFun = fn(Output);
 pub type CmdFun = fn(Args, OutFun);
 
 pub struct Command {
@@ -88,23 +100,38 @@ impl Registry {
                 fun(args, self.out);
             }
             Err(err) => {
-                (self.out)(err);
+                let output = Output::Text(Text { data: err.to_string() });
+                (self.out)(output);
             }
         }
     }
 }
 
+// Command development helpers
+macro_rules! text_output {
+    ($out:ident, $text:expr) => {
+        $out(Output::Text(Text { data: $text.to_string() }))
+    };
+}
+
+macro_rules! media_output {
+    ($out:ident, $name:expr, $text:expr) => {
+        $out(Output::Media(Media { name: $name, data: $text.to_string() }))
+    };
+}
+
+// Commands
 fn ping(_args: Args, out: OutFun) {
-    out("Pong!".to_string());
+    text_output!(out, "Pong!");
 }
 
 fn quit(args: Args, out: OutFun) {
     if args.len() < 1 {
-        out("Place 'ohyes' as an argument to quit".to_string());
+        text_output!(out, "Place 'ohyes' as an argument to quit");
     } else if args[0] != "ohyes" {
-        out("Place 'ohyes' as an argument bro".to_string());
+        text_output!(out, "Place 'ohyes' as an argument bro");
     } else {
-        out("Exiting...".to_string());
+        text_output!(out, "Exiting...");
         std::process::exit(0);
     }
 }
