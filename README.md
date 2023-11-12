@@ -1,10 +1,10 @@
-# Nero Cybersecurity Framework
+# Nero
 
 > v0.2.0
 
 ## Overview
 
-Nero is a cybersecurity post-exploitation-like framework developed in Rust. It is designed to be lightweight with low system overhead, making it suitable for backup access on servers. However, it's crucial to emphasize that the post-exploitation features are intended strictly for educational purposes and should not be used for unethical activities.
+Nero is a post-exploitation-like framework developed in Rust. It is designed to be lightweight with low system overhead, making it suitable for backup access on servers. However, it's crucial to emphasize that the post-exploitation features are intended strictly for educational purposes and should not be used for unethical activities.
 
 The framework's flexibility lies in its ability to support various client-server architectures. Nero's extensibility allows users to easily add commands to tailor the tool to their specific needs.
 
@@ -41,7 +41,7 @@ To get started with Nero, refer to the documentation in the `docs/` directory. I
 The flexibility of Nero extends to its main.rs file, allowing users to tailor it to their specific requirements. Below is a basic template illustrating how you might structure your main.rs. Keep in mind that this is just a starting point, and you can modify it extensively based on your use case, and also the fact that extensibility means ease to migrate to different client-server architectures.
 
 ```rust
-
+// TODO: this
 ```
 
 ## Disclaimer
@@ -50,4 +50,4 @@ Nero is developed for educational purposes and ethical use only. Any misuse or u
 
 ## License
 
-Nero is open-source software released under the [GNU General Public License (GPL)](LICENSE). Feel free to contribute, share, and modify the code in compliance with the license terms.
+Nero is open-source software released under the [Apache License 2.0](LICENSE). Feel free to contribute, share, and modify the code in compliance with the license terms.
