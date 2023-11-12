@@ -1,6 +1,6 @@
-use crate::command::{ Registry, OutFun, Command, init };
+use crate::core::{ Registry, OutFun, Command, init };
 
-pub use crate::command::Output;
+pub use crate::core::Output;
 
 pub struct Nero {
     pub reg: Registry,

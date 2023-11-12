@@ -1,9 +1,9 @@
 #![allow(dead_code)]
 #![allow(unused_macros)] // Future contributors, remove this after beta
-mod command;
+mod core;
 mod nero;
 
-use command::Output;
+use crate::core::Output;
 use nero::Nero;
 
 use std::io;
