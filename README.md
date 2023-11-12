@@ -21,7 +21,7 @@ The framework's flexibility lies in its ability to support various client-server
 ## Disadvantages
 
 - **Windows only:** Nero's development now focuses on windows targets, so linux targets might not work at all. Heck, they might not even compile, meaning that this tool currently is heavily unsuitable for servers, since most servers run on linux. But hang tight, we will do it :\)
-- **Heavy development:** Nero is under some serious development. It is highly unstable and will most likely be useless. But hang tight fo this one too, we will do it :\)
+- **Heavy development:** Nero is under some serious development. It is highly unstable and will most likely be useless. But hang tight for this one too, we will do it :\)
 
 ## Contribution Guidelines
 
