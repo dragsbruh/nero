@@ -1,0 +1,138 @@
+#![allow(dead_code)]
+use std::collections::HashMap;
+
+pub type Args = Vec<String>;
+pub type OutFun = fn(String);
+pub type CmdFun = fn(Args, OutFun);
+
+pub struct Command {
+    pub name: String,
+    pub args: Vec<String>,
+}
+impl Command {
+    pub fn from(string: &String) -> Result<Command, String> {
+        let mut args = Vec::new();
+        let mut current_arg = String::new();
+        let mut inside_quotes = false;
+
+        for c in string.chars() {
+            match c {
+                ' ' if !inside_quotes => {
+                    if !current_arg.is_empty() {
+                        args.push(current_arg.clone());
+                        current_arg.clear();
+                    }
+                }
+                '\"' => {
+                    inside_quotes = !inside_quotes;
+                }
+                _ => {
+                    current_arg.push(c);
+                }
+            }
+        }
+
+        if !current_arg.is_empty() {
+            args.push(current_arg);
+        }
+
+        if inside_quotes {
+            return Err(String::from("Unclosed quote"));
+        }
+
+        if args.is_empty() {
+            return Err(String::from("No command provided"));
+        }
+
+        // Remove the last two characters if they are "\r\n"
+        if let Some(last_arg) = args.last_mut() {
+            if last_arg.ends_with("\r\n") {
+                last_arg.pop();
+                last_arg.pop();
+            }
+        }
+
+        let name = args[0].clone();
+        args.remove(0);
+
+        Ok(Command { name, args })
+    }
+}
+
+pub struct Registry {
+    pub fields: HashMap<String, CmdFun>,
+    pub out: OutFun,
+}
+impl Registry {
+    pub fn new(out: OutFun) -> Registry {
+        Self {
+            fields: HashMap::new(),
+            out: out,
+        }
+    }
+    pub fn enter(&mut self, name: &str, fun: CmdFun) {
+        let name = name.to_string();
+        self.fields.insert(name, fun);
+    }
+    pub fn get(&self, name: String) -> Result<CmdFun, String> {
+        if let Some(&fun) = self.fields.get(&name) {
+            Ok(fun)
+        } else {
+            Err(format!("No such command: {}", name))
+        }
+    }
+    pub fn exec(&self, name: String, args: Args) {
+        let rfun = self.get(name);
+        match rfun {
+            Ok(fun) => {
+                fun(args, self.out);
+            }
+            Err(err) => {
+                (self.out)(err);
+            }
+        }
+    }
+}
+
+fn ping(_args: Args, out: OutFun) {
+    out("Pong!".to_string());
+}
+
+fn quit(_args: Args, out: OutFun) {
+    out("Exiting...".to_string());
+    std::process::exit(0);
+}
+
+pub fn init(out: OutFun) -> Registry {
+    let mut reg = Registry::new(out);
+
+    reg.enter("ping", ping);
+
+    return reg;
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Command;
+
+    #[test]
+    fn test_parse_command_normal() {
+        let input = String::from("command");
+        let result = Command::from(&input).expect("Error parsing command");
+        assert_eq!("command", result.name);
+    }
+    #[test]
+    fn test_parse_command_args() {
+        let input = String::from("ancmd arg1 arg2");
+        let result = Command::from(&input).expect("Error parsing command");
+        assert_eq!("ancmd", result.name);
+        assert_eq!(vec!["arg1", "arg2"], result.args);
+    }
+    #[test]
+    fn test_parse_command_quoted_args() {
+        let input = String::from(r#"an2cmd arg1 arg2 "plus sized arg3""#);
+        let result = Command::from(&input).expect("Error parsing command");
+        assert_eq!("an2cmd", result.name);
+        assert_eq!(vec!["arg1", "arg2", "plus sized arg3"], result.args);
+    }
+}
