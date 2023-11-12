@@ -10,7 +10,7 @@ pub struct Command {
     pub args: Vec<String>,
 }
 impl Command {
-    pub fn from(string: &String) -> Result<Command, String> {
+    pub fn new(string: &String) -> Result<Command, String> {
         let mut args = Vec::new();
         let mut current_arg = String::new();
         let mut inside_quotes = false;
@@ -98,15 +98,23 @@ fn ping(_args: Args, out: OutFun) {
     out("Pong!".to_string());
 }
 
-fn quit(_args: Args, out: OutFun) {
-    out("Exiting...".to_string());
-    std::process::exit(0);
+fn quit(args: Args, out: OutFun) {
+    if args.len() < 1 {
+        out("Place 'ohyes' as an argument to quit".to_string());
+    } else if args[0] != "ohyes" {
+        out("Place 'ohyes' as an argument bro".to_string());
+    } else {
+        out("Exiting...".to_string());
+        std::process::exit(0);
+    }
 }
 
 pub fn init(out: OutFun) -> Registry {
     let mut reg = Registry::new(out);
 
     reg.enter("ping", ping);
+    reg.enter("quit", quit);
+    reg.enter("exit", quit);
 
     return reg;
 }
@@ -118,20 +126,20 @@ mod tests {
     #[test]
     fn test_parse_command_normal() {
         let input = String::from("command");
-        let result = Command::from(&input).expect("Error parsing command");
+        let result = Command::new(&input).expect("Error parsing command");
         assert_eq!("command", result.name);
     }
     #[test]
     fn test_parse_command_args() {
         let input = String::from("ancmd arg1 arg2");
-        let result = Command::from(&input).expect("Error parsing command");
+        let result = Command::new(&input).expect("Error parsing command");
         assert_eq!("ancmd", result.name);
         assert_eq!(vec!["arg1", "arg2"], result.args);
     }
     #[test]
     fn test_parse_command_quoted_args() {
         let input = String::from(r#"an2cmd arg1 arg2 "plus sized arg3""#);
-        let result = Command::from(&input).expect("Error parsing command");
+        let result = Command::new(&input).expect("Error parsing command");
         assert_eq!("an2cmd", result.name);
         assert_eq!(vec!["arg1", "arg2", "plus sized arg3"], result.args);
     }

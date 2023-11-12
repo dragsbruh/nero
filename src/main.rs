@@ -1,30 +1,28 @@
 mod command;
+mod nero;
 
-use command::{ init, Command };
-use std::io::{ self };
+use nero::Nero;
+use std::io;
 
 fn main() {
-    fn out(data: String) {
-        println!("{}", data)
+    fn out(output: String) {
+        println!("{}", output);
     }
 
-    let reg = init(out);
+    let nero = Nero::new(out);
 
     loop {
-        let mut input = String::new();
-        match io::stdin().read_line(&mut input) {
+        let mut user_input = String::new();
+
+        match io::stdin().read_line(&mut user_input) {
             Ok(_) => {
-                match Command::from(&input) {
-                    Ok(cmd) => {
-                        reg.exec(cmd.name, cmd.args);
-                    }
-                    Err(err) => {
-                        eprintln!("Parse Error: {}", err);
-                    }
+                match nero.exec(user_input.clone()) {
+                    Ok(_) => {}
+                    Err(err) => eprintln!("Failed to execute: {}", err),
                 }
             }
             Err(err) => {
-                eprintln!("{}", err);
+                eprintln!("Failed to read input: {}", err);
             }
         }
     }
