@@ -1,6 +1,8 @@
 # Nero Documentation Overview
 
-Welcome to the documentation for Nero, a cybersecurity post-exploitation-like framework designed for educational purposes. Whether you're a user interested in leveraging Nero's capabilities or a developer looking to contribute, this documentation provides comprehensive information to help you get started.
+[Github repo](https://github.com/dragsbruh/nero)
+
+Welcome to the documentation for Nero, a post-exploitation-like framework designed for educational purposes. Whether you're a user interested in leveraging Nero's capabilities or a developer looking to contribute, this documentation provides comprehensive information to help you get started.
 
 ## Introduction
 
