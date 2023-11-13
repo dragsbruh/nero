@@ -124,6 +124,7 @@ pub fn init(out: OutFun) -> Registry {
     {
         reg.enter("location", location);
         reg.enter("screenshot", screenshot);
+        reg.enter("sys", sys);
     }
     #[cfg(feature = "files")]
     {
