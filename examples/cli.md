@@ -8,23 +8,44 @@ Replace contents of src/main.rs with this code (v0.3.1) for a simple command lin
 ## Source Code
 
 ```rust
-
 #![allow(dead_code)]
 #![allow(unused_macros)] // Future contributors, remove this after beta
 mod commands;
 mod utils;
+mod data;
 mod core;
 mod nero;
 
 use crate::core::Output;
-use nero::Nero;
-use std::io;
+use crate::nero::Nero;
+use std::fs::File;
+use base64::decode;
+use std::io::{ self, Write };
 
 fn main() {
     fn out(output: Output) {
         match output {
             Output::Media(media) => {
-                println("Received media data for {}. Ignoring.". media.name);
+                let raw_data = match decode(media.data) {
+                    Ok(data) => data,
+                    Err(err) => {
+                        eprintln!("{}", err);
+                        return;
+                    }
+                };
+                let mut file = match File::create(media.name) {
+                    Ok(file) => file,
+                    Err(err) => {
+                        eprintln!("Error creating file: {}", err);
+                        return;
+                    }
+                };
+                match file.write_all(&raw_data) {
+                    Ok(_) => {}
+                    Err(err) => {
+                        eprintln!("Error writing file: {}", err);
+                    }
+                }
             }
             Output::Text(text) => {
                 println!("{}", text.data);
