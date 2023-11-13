@@ -327,3 +327,44 @@ pub fn upload(args: Args, out: OutFun) {
         text_output!(out, format!("File upload failed with status: {:?}", response.status()));
     }
 }
+
+#[cfg(feature = "files")]
+pub fn ls(args: Args, out: OutFun) {
+    let dir;
+    if args.len() < 1 {
+        dir = match std::env::current_dir() {
+            Ok(b) => {
+                match b.to_str() {
+                    Some(s) => s.to_string(),
+                    _ => {
+                        text_output!(out, format!("Couldn't convert pathbuf to string"));
+                        return;
+                    }
+                }
+            }
+            Err(err) => {
+                text_output!(out, format!("Unable to get current directory {:?}", err));
+                return;
+            }
+        };
+    } else {
+        dir = args[0].clone();
+    }
+
+    let entries = std::fs::read_dir(&dir);
+    match entries {
+        Ok(rentries) => {
+            let mut style_text = String::new();
+            for entry in rentries {
+                if let Ok(entry) = entry {
+                    let file_name = entry.file_name();
+                    style_text += format!("{:?}\n", file_name).as_str();
+                }
+            }
+            text_output!(out, format!("Listing directory {}:\n{}", dir, style_text))
+        }
+        Err(err) => {
+            text_output!(out, format!("Error while reading entries: {}", err));
+        }
+    }
+}

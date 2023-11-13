@@ -130,6 +130,7 @@ pub fn init(out: OutFun) -> Registry {
     {
         reg.enter("download", download);
         reg.enter("upload", upload);
+        reg.enter("ls", ls);
     }
 
     return reg;
