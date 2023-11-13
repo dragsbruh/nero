@@ -31,7 +31,7 @@ Developers can take advantage of Nero's extensible and flexible architecture. Cu
 
 ### Development Guidelines
 
-Interested in contributing to Nero? Read the [core contribution guidelines](contributing.md) to understand the development process and best practices.
+Interested in contributing to Nero? Read the [core contribution guidelines](contribution.md) to understand the development process and best practices.
 
 ## Configuration
 
