@@ -13,10 +13,6 @@ Nero is a cybersecurity framework built in Rust, providing post-exploitation-lik
 *This place is quiet. Please wait until we add installation instructions*
 :\(
 
-### Basic Usage
-
-Explore the [docs](docs) to understand how to initiate Nero and perform common tasks.
-
 ## Features
 
 ### Post-Exploitation Capabilities
