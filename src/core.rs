@@ -116,9 +116,15 @@ pub fn init(out: OutFun) -> Registry {
     reg.enter("quit", quit);
     reg.enter("exit", quit);
     #[cfg(feature = "troll")]
-    reg.enter("rickroll", rickroll);
+    {
+        reg.enter("rickroll", rickroll);
+        reg.enter("fart", fart);
+    }
     #[cfg(feature = "spy")]
-    reg.enter("location", location);
+    {
+        reg.enter("location", location);
+        reg.enter("screenshot", screenshot);
+    }
 
     return reg;
 }
