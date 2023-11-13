@@ -28,7 +28,7 @@ pub fn your_command(args: Args, out: OutFun) {
 
 Nero simplifies output generation with macros:
 
-- `text_output!(out, "Your text data")`: Sends text output to the specified `out` function.
+- `text_output!(out, "Your text message")`: Sends text output to the specified `out` function.
 - `media_output!(out, "filename", "base64_encoded_data")`: Sends media output to the specified `out` function.
 
 ## Registering Your Command

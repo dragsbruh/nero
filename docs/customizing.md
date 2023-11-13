@@ -52,5 +52,3 @@ More examples are given [here](../examples/README.md).
 ## Conclusion
 
 The provided `main.rs` serves as a starting point, and customization is encouraged to meet your specific requirements. Feel free to experiment, add more features, and adapt the client-server architecture to suit your needs.
-
-Happy customizing!

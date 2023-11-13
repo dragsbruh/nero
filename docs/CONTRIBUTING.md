@@ -4,7 +4,7 @@ Welcome to the Nero Core contribution guide! As a core contributor, you play a c
 
 **This guide is for legends who want to contribute to core.rs.**
 
-> - To create a client server architecture, follow [this guide](customizing).
+> - To create a client server architecture, follow [this guide](customizing.md).
 > - To add commands, follow [this guide](commands.md).
 
 ## Overview of Core.rs
