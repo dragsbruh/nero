@@ -33,9 +33,9 @@ Nero is currently in heavy development, and the codebase is subject to frequent 
 
 - **`src/`:** Contains the source code of the Nero framework.
 
-- **`docs/`:** Documentation for using and contributing to Nero. **NOT AVAILABLE**
+- **`docs/`:** Documentation for using and contributing to Nero.
 
-- **`examples/`:** Examples demonstrating the implementation of Nero commands. **NOT AVAILABLE**
+- **`examples/`:** Examples demonstrating the implementation of Nero commands.
 
 ## Getting Started
 
