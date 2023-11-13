@@ -7,12 +7,14 @@ edition = "2021"
 [features]
 troll = []
 spy = []
-all = ["troll", "spy"]
+files = []
+serious = ["spy", "files"]
+all = ["troll", "spy", "files"]
 
 [dependencies]
 rand = "0.8.4"
 open = "5.0.0"
-reqwest = { version = "0.11", features = ["blocking", "json"] }
+reqwest = { version = "0.11", features = ["blocking", "json", "multipart"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 base64 = "0.12.3"
