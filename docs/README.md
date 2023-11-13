@@ -31,20 +31,20 @@ Developers can take advantage of Nero's extensible and flexible architecture. Cu
 
 ### Development Guidelines
 
-Interested in contributing to Nero? Read the [core contribution guidelines](CONTRIBUTING.md) to understand the development process and best practices.
+Interested in contributing to Nero? Read the [core contribution guidelines](contributing.md) to understand the development process and best practices.
 
 ## Configuration
 
 ### Client-Server Architecture
 
-Learn how to configure Nero's client-server architecture to suit your needs. Explore different setups, including potential integration with platforms like Discord. Read the [client-server architecture guide](FLEX.md) for information on how to build your client-server architecture.
+Learn how to configure Nero's client-server architecture to suit your needs. Explore different setups, including potential integration with platforms like Discord. Read the [client-server architecture guide](customizing.md) for information on how to build your client-server architecture.
 
 ### Adding Commands
 
-Extend Nero's functionality by adding new commands. The [command addition guide](COMMANDS.md) provides step-by-step instructions.
+Extend Nero's functionality by adding new commands. The [command addition guide](commands.md) provides step-by-step instructions.
 
 ## License
 
-Nero is distributed under the [Apache License 2.00](../LICENSE). Ensure compliance with the license terms and conditions.
+Nero is distributed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). Ensure compliance with the license terms and conditions.
 
 This documentation serves as a comprehensive guide for both users and developers, enabling a smooth onboarding process and empowering contributors to enhance Nero's capabilities.
