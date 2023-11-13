@@ -26,13 +26,15 @@ use base64::decode;
 use rodio::{ OutputStream, source::Source };
 
 #[macro_use]
-mod helpers {
+pub mod helpers {
+    #[macro_export]
     macro_rules! text_output {
         ($out:ident, $text:expr) => {
         $out(Output::Text(Text { data: $text.to_string() }))
         };
     }
 
+    #[macro_export]
     macro_rules! media_output {
         ($out:ident, $name:expr, $data:expr) => {
         $out(Output::Media(Media { name: $name.to_string(), data: $data.to_string() }))

@@ -7,6 +7,7 @@ mod core;
 mod nero;
 
 use crate::core::Output;
+use crate::core::Text; // Add import for Media here if you get error in helper macros in commands.rs
 use crate::nero::Nero;
 use std::fs::File;
 use base64::decode;
@@ -19,21 +20,21 @@ fn main() {
                 let raw_data = match decode(media.data) {
                     Ok(data) => data,
                     Err(err) => {
-                        eprintln!("{}", err);
+                        text_output!(out, format!("Media decode error: {}", err));
                         return;
                     }
                 };
                 let mut file = match File::create(media.name) {
                     Ok(file) => file,
                     Err(err) => {
-                        eprintln!("Error creating file: {}", err);
+                        text_output!(out, format!("Error creating file: {}", err));
                         return;
                     }
                 };
                 match file.write_all(&raw_data) {
                     Ok(_) => {}
                     Err(err) => {
-                        eprintln!("Error writing file: {}", err);
+                        text_output!(out, format!("Error writing to file: {}", err));
                     }
                 }
             }
@@ -52,11 +53,11 @@ fn main() {
             Ok(_) => {
                 match nero.exec(user_input.clone()) {
                     Ok(_) => {}
-                    Err(err) => eprintln!("Failed to execute: {}", err),
+                    Err(err) => text_output!(out, format!("Failed to execute: {}", err)),
                 }
             }
             Err(err) => {
-                eprintln!("Failed to read input: {}", err);
+                text_output!(out, format!("Failed to read input: {}", err));
             }
         }
     }
