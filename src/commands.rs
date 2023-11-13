@@ -19,8 +19,8 @@ mod helpers {
     }
 
     macro_rules! media_output {
-        ($out:ident, $name:expr, $text:expr) => {
-        $out(Output::Media(Media { name: $name, data: $text.to_string() }))
+        ($out:ident, $name:expr, $data:expr) => {
+        $out(Output::Media(Media { name: $name, data: $data.to_string() }))
         };
     }
 }
