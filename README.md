@@ -20,7 +20,7 @@ The framework's flexibility lies in its ability to support various client-server
 
 ## Disadvantages
 
-- **Windows only:** Nero's development now focuses on windows targets, so linux targets might not work at all. Heck, they might not even compile, meaning that this tool currently is heavily unsuitable for servers, since most servers run on linux. But hang tight, we will do it :\)
+- **Windows only:** Nero's development now focuses on Windows targets, so Linux targets might not work at all. Heck, they might not even compile, meaning that this tool currently is heavily unsuitable for servers, since most servers run on Linux. But hang tight, we will do it :\)
 - **Heavy development:** Nero is under some serious development. It is highly unstable and will most likely be useless. But hang tight for this one too, we will do it :\)
 
 ## Contribution Guidelines
@@ -43,7 +43,7 @@ To get started with Nero, refer to the documentation in the `docs/` directory. I
 
 ## Modifying Nero
 
-The flexibility of Nero extends to its main.rs file, allowing users to tailor it to their specific requirements. Below is a basic template illustrating how you might structure your main.rs. Keep in mind that this is just a starting point, and you can modify it extensively based on your use case, and also the fact that extensibility means ease to migrate to different client-server architectures.
+The flexibility of Nero extends to its main.rs file, allowing users to tailor it to their specific requirements. Below is a basic template illustrating how you might structure your main.rs. Keep in mind that this is just a starting point, and you can modify it extensively based on your use case, and also the fact that extensibility means ease of migrating to different client-server architectures.
 
 ```rust
 // TODO: this
