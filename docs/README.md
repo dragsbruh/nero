@@ -15,7 +15,7 @@ Nero is a cybersecurity framework built in Rust, providing post-exploitation-lik
 
 ### Basic Usage
 
-Explore the [basic usage guide](USAGE.md) to understand how to initiate Nero and perform common tasks.
+Explore the [docs](docs) to understand how to initiate Nero and perform common tasks.
 
 ## Features
 
@@ -35,7 +35,7 @@ Developers can take advantage of Nero's extensible and flexible architecture. Cu
 
 ### Development Guidelines
 
-Interested in contributing to Nero? Read the [core contribution guidelines](C0NTRIBUTING.md) to understand the development process and best practices.
+Interested in contributing to Nero? Read the [core contribution guidelines](CONTRIBUTING.md) to understand the development process and best practices.
 
 ## Configuration
 
