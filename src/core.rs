@@ -22,6 +22,9 @@ pub struct Command {
 }
 impl Command {
     pub fn new(string: &String) -> Result<Command, String> {
+        // Trim the entire input string to handle trailing spaces and newline characters
+        let string = string.trim();
+
         let mut args = Vec::new();
         let mut current_arg = String::new();
         let mut inside_quotes = false;
@@ -53,14 +56,6 @@ impl Command {
 
         if args.is_empty() {
             return Err(String::from("No command provided"));
-        }
-
-        // Remove the last two characters if they are "\r\n"
-        if let Some(last_arg) = args.last_mut() {
-            if last_arg.ends_with("\r\n") {
-                last_arg.pop();
-                last_arg.pop();
-            }
         }
 
         let name = args[0].clone();

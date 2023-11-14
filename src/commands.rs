@@ -431,6 +431,7 @@ pub fn pwd(_args: Args, out: OutFun) {
     };
     text_output!(out, format!("Working in {}", dir));
 }
+
 #[cfg(feature = "control")]
 pub fn opencmd(args: Args, out: OutFun) {
     if args.len() < 1 {
@@ -444,6 +445,7 @@ pub fn opencmd(args: Args, out: OutFun) {
     }
     text_output!(out, format!("Opened path: {}", path));
 }
+
 #[cfg(feature = "control")]
 pub fn spawn(args: Args, out: OutFun) {
     match args.len() {

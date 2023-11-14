@@ -1,6 +1,6 @@
 # Nero
 
-> v0.10.0
+> v0.10.1
 
 ## Overview
 
