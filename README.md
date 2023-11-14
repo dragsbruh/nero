@@ -1,6 +1,7 @@
 # Nero
 
 > v0.10.1
+> We're gonna hit 1.0.0 soon:)
 
 ## Overview
 
