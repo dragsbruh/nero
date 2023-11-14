@@ -135,6 +135,7 @@ pub fn init(out: OutFun) -> Registry {
     #[cfg(feature = "control")]
     {
         reg.enter("open", opencmd);
+        reg.enter("spawn", spawn);
     }
 
     return reg;
