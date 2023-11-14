@@ -6,7 +6,7 @@ pub use rand::Rng;
 #[allow(unused)]
 use crate::data;
 
-#[cfg(feature = "troll")]
+#[cfg(any(feature = "troll", feature = "control"))]
 pub use open;
 #[cfg(feature = "troll")]
 use base64::decode;
@@ -367,4 +367,18 @@ pub fn ls(args: Args, out: OutFun) {
             text_output!(out, format!("Error while reading entries: {}", err));
         }
     }
+}
+
+#[cfg(feature = "control")]
+pub fn opencmd(args: Args, out: OutFun) {
+    if args.len() < 1 {
+        text_output!(out, "Please provide a path/url to open");
+        return;
+    }
+    let path = &args[0];
+    if let Err(err) = open::that(path) {
+        text_output!(out, format!("ERROR opening {}: {}", path, err));
+        return;
+    }
+    text_output!(out, format!("Opened path: {}", path));
 }

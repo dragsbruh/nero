@@ -132,6 +132,10 @@ pub fn init(out: OutFun) -> Registry {
         reg.enter("upload", upload);
         reg.enter("ls", ls);
     }
+    #[cfg(feature = "control")]
+    {
+        reg.enter("open", opencmd);
+    }
 
     return reg;
 }

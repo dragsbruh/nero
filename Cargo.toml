@@ -8,8 +8,9 @@ edition = "2021"
 troll = []
 spy = []
 files = []
-serious = ["spy", "files"]
-all = ["troll", "spy", "files"]
+control = []
+serious = ["spy", "files", "control"]
+all = ["troll", "spy", "files", "control"]
 
 [dependencies]
 rand = "0.8.4"
