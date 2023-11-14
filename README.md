@@ -3,6 +3,8 @@
 > v0.10.1
 > We're gonna hit 1.0.0 soon:)
 
+**NOTICE:** Since Nero is going to hit 1.0.0 soon, I am working on a different project that demonstrates the use of Nero in a "real world scenario". This will help catch bugs and stuff and also make sure Nero is actually working fine. The project will be [here](https://github.com/dragsbruh/neroo) soon and will be called Neroo (for secret reasons).
+
 ## Overview
 
 Nero is a post-exploitation-like framework developed in Rust. It is designed to be lightweight with low system overhead, making it suitable for backup access on servers. However, it's crucial to emphasize that the post-exploitation features are intended strictly for educational purposes and should not be used for unethical activities.
