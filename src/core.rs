@@ -130,7 +130,9 @@ pub fn init(out: OutFun) -> Registry {
     {
         reg.enter("download", download);
         reg.enter("upload", upload);
+        reg.enter("dupload", dupload);
         reg.enter("ls", ls);
+        reg.enter("pwd", pwd);
     }
     #[cfg(feature = "control")]
     {
