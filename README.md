@@ -4,6 +4,7 @@
 > We're gonna hit 1.0.0 soon:)
 
 **NOTICE:** Since Nero is going to hit 1.0.0 soon, I am working on a different project that demonstrates the use of Nero in a "real world scenario". This will help catch bugs and stuff and also make sure Nero is actually working fine. The project will be [here](https://github.com/dragsbruh/neroo) soon and will be called Neroo (for secret reasons).
+**NOTICE:** Nero is temporarily discontinued :\(
 
 ## Overview
 
